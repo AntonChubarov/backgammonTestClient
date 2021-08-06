@@ -12,7 +12,7 @@ func main() {
 	client := infrastructure.NewWebClient()
 
 	response := domain.UserRegistrationResponse{}
-	output := client.PostRequest(urlBase + "/register", domain.UserRegistrationRequest{Login: "admin", Password: "admin"}, &response)
+	output := client.PostRequest(urlBase + "/register", domain.UserRegistrationRequest{Login: "admin3", Password: "admin3"}, &response)
 	fmt.Println(response)
 	fmt.Println(output)
 }
