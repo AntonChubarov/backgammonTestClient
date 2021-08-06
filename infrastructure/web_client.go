@@ -2,8 +2,8 @@ package infrastructure
 
 import (
 	"github.com/go-resty/resty/v2"
-	"log"
 	"github.com/gorilla/websocket"
+	"log"
 )
 
 type WebClient struct {
@@ -34,11 +34,7 @@ func (w *WebClient) PostRequest(url string, request interface{},  result interfa
 		return err
 	}
 
-	if resp.IsError() {
-		return resp.StatusCode()
-	}
-
-	return resp.String()
+	return string(resp.Body())
 }
 
 func (w *WebClient) PingWebSocket(url string) interface{} {
