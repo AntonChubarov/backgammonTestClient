@@ -16,8 +16,8 @@ func NewWebClient() *WebClient {
 	}
 }
 
-func (w *WebClient) GetRequest(url string, result *interface{}) interface{} {
-	resp, err:= w.client.R().SetResult(result).Get(url)
+func (w *WebClient) GetRequest(url string, result interface{}) interface{} {
+	resp, err:= w.client.R().SetResult(&result).Get(url)
 	if err !=nil {
 		log.Println(err)
 	}

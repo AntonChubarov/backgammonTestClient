@@ -1,10 +1,15 @@
 package domain
 
-type UserRegistrationRequest struct {
-	Login string
-	Password string
+type UserAuthRequestDTO struct {
+	Login string `json:"login"`
+	Password string `json:"password"`
 }
 
-type UserRegistrationResponse struct {
-	Message string
+type UserRegistrationResponseDTO struct {
+	Message string `json:"message"`
+}
+
+type UserAuthorizationResponseDTO struct {
+	Message string `json:"message"`
+	Token string `json:"token"`
 }
