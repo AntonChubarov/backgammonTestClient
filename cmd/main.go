@@ -4,6 +4,7 @@ import (
 	"backgammonclient/domain"
 	"backgammonclient/infrastructure"
 	"fmt"
+	"time"
 )
 
 func main() {
@@ -16,14 +17,28 @@ func main() {
 	fmt.Println(output1)
 
 	response2 := domain.UserAuthorizationResponseDTO{}
-	output2 := client.PostRequest(urlBase + "/login", domain.UserAuthRequestDTO{Login: "admin3", Password: "admin3password"}, &response2)
+	output2 := client.PostRequest(urlBase + "/login", domain.UserAuthRequestDTO{Login: "admin1", Password: "admin1password"}, &response2)
 	fmt.Println(output2)
 
 	response3 := domain.UserAuthorizationResponseDTO{}
-	output3 := client.PostRequest(urlBase + "/login", domain.UserAuthRequestDTO{Login: "admin3", Password: "admin3passwor"}, &response3)
+	output3 := client.PostRequest(urlBase + "/login", domain.UserAuthRequestDTO{Login: "admin2", Password: "admin2password"}, &response3)
 	fmt.Println(output3)
 
 	response4 := domain.UserAuthorizationResponseDTO{}
-	output4 := client.PostRequest(urlBase + "/login", domain.UserAuthRequestDTO{Login: "admin", Password: "admin3passwor"}, &response4)
+	output4 := client.PostRequest(urlBase + "/login", domain.UserAuthRequestDTO{Login: "admin3", Password: "admin3password"}, &response4)
 	fmt.Println(output4)
+
+	response5 := domain.UserAuthorizationResponseDTO{}
+	output5 := client.PostRequest(urlBase + "/login", domain.UserAuthRequestDTO{Login: "admin3", Password: "admin3passwor"}, &response5)
+	fmt.Println(output5)
+
+	response6 := domain.UserAuthorizationResponseDTO{}
+	output6 := client.PostRequest(urlBase + "/login", domain.UserAuthRequestDTO{Login: "admin", Password: "admin3passwor"}, &response6)
+	fmt.Println(output6)
+
+	time.Sleep(30 * time.Second)
+
+	response7 := domain.UserAuthorizationResponseDTO{}
+	output7 := client.PostRequest(urlBase + "/login", domain.UserAuthRequestDTO{Login: "admin1", Password: "admin1password"}, &response7)
+	fmt.Println(output7)
 }
