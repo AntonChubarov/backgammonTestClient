@@ -4,6 +4,8 @@ import (
 	"github.com/go-resty/resty/v2"
 	"github.com/gorilla/websocket"
 	"log"
+	"net/http"
+	"time"
 )
 
 type WebClient struct {
@@ -38,10 +40,26 @@ func (w *WebClient) PostRequest(url string, request interface{},  result interfa
 }
 
 func (w *WebClient) PingWebSocket(url string) interface{} {
-	c, resp, err := websocket.DefaultDialer.Dial(url, nil)
+	c, resp, err := websocket.DefaultDialer.Dial(url, http.Header{})
 	if err != nil {
 		return err
 	}
-	defer c.Close()
+
+	go ListenWebSocket(c)
+
 	return resp.StatusCode
+}
+
+func ListenWebSocket(conn *websocket.Conn) {
+	defer conn.Close()
+	for {
+		log.Println("reader running")
+		time.Sleep(200 * time.Millisecond)
+		mtype, msg, err := conn.ReadMessage()
+		if err != nil {
+			log.Println(err)
+			break
+		}
+		log.Println(mtype, msg)
+	}
 }

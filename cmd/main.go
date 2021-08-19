@@ -9,6 +9,7 @@ import (
 
 func main() {
 	urlBase := "http://localhost:8080"
+	urlWSBase := "ws://localhost:8080"
 
 	client := infrastructure.NewWebClient()
 
@@ -36,7 +37,7 @@ func main() {
 	output6 := client.PostRequest(urlBase + "/authorize", domain.UserAuthRequestDTO{Username: "admin", Password: "admin3passwor"}, &response6)
 	fmt.Println(output6)
 
-	time.Sleep(30 * time.Second)
+	time.Sleep(5 * time.Second)
 
 	response7 := domain.UserAuthorizationResponseDTO{}
 	output7 := client.PostRequest(urlBase + "/authorize", domain.UserAuthRequestDTO{Username: "admin1", Password: "admin1password"}, &response7)
@@ -49,4 +50,26 @@ func main() {
 	response9 := domain.UserRegistrationResponseDTO{}
 	output9 := client.PostRequest(urlBase + "/register", domain.UserAuthRequestDTO{Username: "admin5", Password: "ad5p"}, &response9)
 	fmt.Println(output9)
+
+	output10 := client.PingWebSocket(urlWSBase + "/ws?token=" + response7.Token)
+	fmt.Println(output10)
+
+	time.Sleep(2 * time.Second)
+
+	output11 := client.PingWebSocket(urlWSBase + "/ws?token=" + response3.Token)
+	fmt.Println(output11)
+
+	time.Sleep(2 * time.Second)
+
+	output12 := client.PingWebSocket(urlWSBase + "/ws?token=" + response4.Token)
+	fmt.Println(output12)
+
+	time.Sleep(2 * time.Second)
+
+	output13 := client.PingWebSocket(urlWSBase + "/ws?token=" + "dkjfklsdADDF1456")
+	fmt.Println(output13)
+
+	for {
+		time.Sleep(1 * time.Second)
+	}
 }
