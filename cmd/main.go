@@ -69,6 +69,10 @@ func main() {
 	output13 := client.PingWebSocket(urlWSBase + "/ws?token=" + "dkjfklsdADDF1456")
 	fmt.Println(output13)
 
+	response14 := domain.RoomsInfoDTO{}
+	output14 := client.GetRequest(urlBase + "/rooms?token=" + response7.Token, &response14)
+	fmt.Println(output14)
+
 	for {
 		time.Sleep(1 * time.Second)
 	}
