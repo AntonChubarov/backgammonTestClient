@@ -1,3 +1,5 @@
+github.com/brianvoe/gofakeit/v6 v6.7.0 h1:AjkIRgKiLTUmK+50pgDZ1iPJiTzOQxy1zn898C0Zksc=
+github.com/brianvoe/gofakeit/v6 v6.7.0/go.mod h1:palrJUk4Fyw38zIFB/uBZqsgzW5VsNllhHKKwAebzew=
 github.com/go-resty/resty/v2 v2.6.0 h1:joIR5PNLM2EFqqESUjCMGXrWmXNHEU9CEiK813oKYS4=
 github.com/go-resty/resty/v2 v2.6.0/go.mod h1:PwvJS6hvaPkjtjNg9ph+VrSD92bi5Zq73w/BIH7cC3Q=
 github.com/gorilla/websocket v1.4.2 h1:+/TMaTYc4QFitKJxsQ7Yye35DkWvkdLcvGKqM+x0Ufc=
