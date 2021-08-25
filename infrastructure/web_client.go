@@ -12,8 +12,8 @@ type WebClient struct {
 	client *resty.Client
 }
 
-func NewWebClient() *WebClient {
-	return &WebClient{
+func NewWebClient() WebClient {
+	return WebClient{
 		resty.New(),
 	}
 }

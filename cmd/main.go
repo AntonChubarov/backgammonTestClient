@@ -1,22 +1,19 @@
 package main
 
 import (
+	"backgammonclient/config"
 	"backgammonclient/domain"
 	"backgammonclient/infrastructure"
 	"fmt"
-	"github.com/brianvoe/gofakeit/v6"
 	"time"
 )
-
-var urlBase = "http://localhost:8080"
-var urlWSBase = "ws://localhost:8080"
 
 var client = infrastructure.NewWebClient()
 
 func main() {
 	//ServerRequetScript()
 
-	TryToKillServer()
+	go TryToKillServer()
 
 	for {
 		time.Sleep(1 * time.Second)
@@ -54,57 +51,55 @@ func ServerRequetScript() {
 	ConnectWebSocket("dkjfklsdADDF1456")
 
 	response14 := domain.RoomsInfoDTO{}
-	output14 := client.GetRequest(urlBase + "/rooms?token=" + token1, &response14)
+	output14 := client.GetRequest(config.UrlBase+"/rooms?token="+token1, &response14)
 	fmt.Println(output14)
 }
 
 func TryToKillServer() {
 	storage := infrastructure.NewAuthStorage()
 
-	for {
-		go func() {
-			username := gofakeit.Username()
-			password := gofakeit.Password(true, true, true, false, false, 10)
+	registrator := infrastructure.NewUserRegistrator(storage)
+	authorizer := infrastructure.NewUserAuthorizer(storage)
+	webSocketConnector := infrastructure.NewWebSocketConnector(storage)
 
-			fmt.Println("to register:", username, password)
+	go func() {
+		for {//i := 0; i < 100; i++ {
+			registrator.RegisterUser()
+		}
+	}()
 
-			RegisterUser(username, password)
-			storage.AddUser(username, password, "")
-		}()
+	time.Sleep(1 * time.Second)
 
-		go func() {
-			user := storage.GetRandomUser()
-			token := AuthorizeUser(user.Username, user.Password)
-			storage.UpdateToken(user.Username, token)
+	go func() {
+		for {//i := 0; i < 100; i++ {
+			authorizer.AuthorizeUser()
+		}
+	}()
 
-			fmt.Println("authorized:", user.Username, user.Password, token)
-		}()
+	//time.Sleep(5 * time.Second)
 
-		go func() {
-			user := storage.GetRandomUser()
-
-			fmt.Println("to websocket:", user)
-
-			ConnectWebSocket(user.Token)
-		}()
-	}
+	go func() {
+		for {//i := 0; i < 100; i++ {
+			webSocketConnector.ConnectWebSocket()
+		}
+	}()
 }
 
 func RegisterUser(username, password string) {
 	response := domain.UserRegistrationResponseDTO{}
-	output := client.PostRequest(urlBase + "/register", domain.UserAuthRequestDTO{Username: username, Password: password}, &response)
+	output := client.PostRequest(config.UrlBase+"/register", domain.UserAuthRequestDTO{Username: username, Password: password}, &response)
 	fmt.Println(output)
 }
 
 func AuthorizeUser(username, password string) (token string) {
 	response := domain.UserAuthorizationResponseDTO{}
-	output := client.PostRequest(urlBase + "/authorize", domain.UserAuthRequestDTO{Username: username, Password: password}, &response)
+	output := client.PostRequest(config.UrlBase+"/authorize", domain.UserAuthRequestDTO{Username: username, Password: password}, &response)
 	fmt.Println(output)
 	token = response.Token
 	return
 }
 
 func ConnectWebSocket(token string) {
-	output := client.PingWebSocket(urlWSBase + "/ws?token=" + token)
+	output := client.PingWebSocket(config.UrlWSBase + "/ws?token=" + token)
 	fmt.Println(output)
 }

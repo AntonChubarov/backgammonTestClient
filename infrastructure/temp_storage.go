@@ -1,48 +1,46 @@
 package infrastructure
 
 import (
+	"backgammonclient/utils"
 	"sync"
 )
 
 type UserData struct {
+	Index int
 	Username string
 	Password string
 	Token string
 }
 
 type AuthStorage struct {
-	storage map[string]UserData
+	storage []UserData
 	mutex sync.Mutex
 }
 
 func NewAuthStorage() *AuthStorage {
 	return &AuthStorage{
-		storage: make(map[string]UserData),
+		storage: make([]UserData, 0, 1024),
 	}
 }
 
 func (a *AuthStorage) AddUser(username, password, token string) {
 	a.mutex.Lock()
-	a.storage[username] = UserData{Username: username, Password: password, Token: token}
+	a.storage = append(a.storage, UserData{Username: username, Password: password, Token: token})
 	a.mutex.Unlock()
 }
 
-func (a *AuthStorage) GetRandomUser() UserData {
+func (a *AuthStorage) GetRandomUser() (UserData, int) {
 	var temp UserData
+	i := utils.RandomInt(len(a.storage) - 1)
 	a.mutex.Lock()
-	for _, user := range a.storage {
-		temp = user
-		break
-	}
+	temp = a.storage[i]
 	a.mutex.Unlock()
-	return temp
+	return temp, i
 
 }
 
-func (a *AuthStorage) UpdateToken(username, token string) {
+func (a *AuthStorage) UpdateToken(index int, token string) {
 	a.mutex.Lock()
-	temp := a.storage[username]
-	temp.Token = token
-	a.storage[username] = temp
+	a.storage[index].Token = token
 	a.mutex.Unlock()
 }
