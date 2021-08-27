@@ -14,6 +14,9 @@ func main() {
 	//ServerRequetScript()
 
 	go TryToKillServer()
+	go TryToKillServer()
+	go TryToKillServer()
+	go TryToKillServer()
 
 	for {
 		time.Sleep(1 * time.Second)
@@ -60,29 +63,35 @@ func TryToKillServer() {
 
 	registrator := infrastructure.NewUserRegistrator(storage)
 	authorizer := infrastructure.NewUserAuthorizer(storage)
-	webSocketConnector := infrastructure.NewWebSocketConnector(storage)
+	//webSocketConnector := infrastructure.NewWebSocketConnector(storage)
 
 	go func() {
-		for {//i := 0; i < 100; i++ {
+		for { //i := 0; i < 1000; i++ {
 			registrator.RegisterUser()
 		}
 	}()
 
-	time.Sleep(1 * time.Second)
+	time.Sleep(200 * time.Millisecond)
 
 	go func() {
-		for {//i := 0; i < 100; i++ {
+		for { //i := 0; i < 100; i++ {
 			authorizer.AuthorizeUser()
+		}
+	}()
+
+	go func() {
+		for { //i := 0; i < 100; i++ {
+			authorizer.AuthorizeRandomUser()
 		}
 	}()
 
 	//time.Sleep(5 * time.Second)
 
-	go func() {
-		for {//i := 0; i < 100; i++ {
-			webSocketConnector.ConnectWebSocket()
-		}
-	}()
+	//go func() {
+	//	for {//i := 0; i < 100; i++ {
+	//		webSocketConnector.ConnectWebSocket()
+	//	}
+	//}()
 }
 
 func RegisterUser(username, password string) {
